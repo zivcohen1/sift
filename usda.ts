@@ -6,11 +6,7 @@
  * USDA records include the label's ingredient list and nutrients per 100 g.
  *
  * Needs a free key from https://api.data.gov/signup/ ("DEMO_KEY" works for a few tests).
- *
- * Try it (Windows PowerShell):
- *   $env:USDA_API_KEY="your-key"; npx tsx usda.ts 049000028911
- * macOS / Linux:
- *   USDA_API_KEY=your-key npx tsx usda.ts 049000028911
+
  */
 
 export interface UsdaProduct {

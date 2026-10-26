@@ -1,0 +1,126 @@
+{
+  "facts": {
+    "ingredients": [
+      "Enriched wheat flour",
+      "sugar",
+      "whey",
+      "natural flavor",
+      "bacon bits",
+      "salt"
+    ],
+    "mayContain": [
+      "tree nuts"
+    ],
+    "hasIngredients": true,
+    "categoryHits": [
+      {
+        "categoryId": "wheat",
+        "term": "wheat",
+        "certainty": "definite",
+        "ingredient": "Enriched wheat flour",
+        "fromMayContain": false
+      },
+      {
+        "categoryId": "dairy",
+        "term": "whey",
+        "certainty": "definite",
+        "ingredient": "whey",
+        "fromMayContain": false
+      },
+      {
+        "categoryId": "meat",
+        "term": "bacon",
+        "certainty": "definite",
+        "ingredient": "bacon bits",
+        "fromMayContain": false
+      },
+      {
+        "categoryId": "tree_nut",
+        "term": "tree nut",
+        "certainty": "possible",
+        "ingredient": "tree nuts",
+        "fromMayContain": true
+      },
+      {
+        "categoryId": "gluten",
+        "term": "gluten",
+        "certainty": "definite",
+        "ingredient": "gluten",
+        "fromMayContain": false
+      },
+      {
+        "categoryId": "dairy",
+        "term": "milk",
+        "certainty": "definite",
+        "ingredient": "milk",
+        "fromMayContain": false
+      },
+      {
+        "categoryId": "gluten",
+        "term": "wheat",
+        "certainty": "definite",
+        "ingredient": "Enriched wheat flour",
+        "fromMayContain": false,
+        "impliedBy": "wheat"
+      }
+    ],
+    "ambiguous": [
+      {
+        "name": "natural flavor",
+        "ingredient": "natural flavor",
+        "mightBelongTo": [
+          "dairy",
+          "gluten",
+          "tree_nut",
+          "meat"
+        ]
+      }
+    ],
+    "kbVersion": "0.1.0"
+  },
+  "nutrientsPer100g": {
+    "sodium_mg": 600,
+    "sugar_g": 12
+  },
+  "religious": {
+    "kosher": {
+      "scheme": "kosher",
+      "status": "forbidden_ingredient",
+      "certifications": [],
+      "concerns": [
+        {
+          "ingredient": "bacon",
+          "severity": "forbidden"
+        },
+        {
+          "ingredient": "natural flavor",
+          "severity": "doubtful"
+        },
+        {
+          "ingredient": "meat with dairy",
+          "severity": "forbidden"
+        }
+      ],
+      "summary": "Contains bacon, meat with dairy."
+    },
+    "halal": {
+      "scheme": "halal",
+      "status": "forbidden_ingredient",
+      "certifications": [],
+      "concerns": [
+        {
+          "ingredient": "bacon",
+          "severity": "forbidden"
+        },
+        {
+          "ingredient": "natural flavor",
+          "severity": "doubtful"
+        }
+      ],
+      "summary": "Contains bacon."
+    }
+  },
+  "warnings": [
+    "crowd_sourced_check_the_package"
+  ]
+}

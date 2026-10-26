@@ -1,0 +1,5 @@
+[
+  { "term": "natural flavor", "mightBelongTo": ["dairy", "gluten", "tree_nut", "meat"], "qualifiers": [] },
+  { "term": "gelatin", "mightBelongTo": ["meat"], "qualifiers": ["fish gelatin", "beef gelatin", "bovine gelatin"] },
+  { "term": "mono- and diglycerides", "mightBelongTo": ["meat", "dairy"], "qualifiers": ["vegetable mono- and diglycerides"] }
+]

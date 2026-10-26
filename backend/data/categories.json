@@ -1,0 +1,136 @@
+[
+  {
+    "id": "dairy",
+    "label": "Dairy",
+    "terms": [
+      "milk",
+      "whey",
+      "casein",
+      "caseinate",
+      "butter",
+      "cheese",
+      "cream",
+      "yogurt",
+      "lactose",
+      "ghee",
+      "buttermilk"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "cocoa butter",
+      "peanut butter",
+      "coconut milk",
+      "shea butter",
+      "soy milk",
+      "oat milk"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "wheat",
+    "label": "Wheat",
+    "terms": [
+      "wheat",
+      "semolina",
+      "durum",
+      "spelt",
+      "farina",
+      "couscous",
+      "graham"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "buckwheat",
+      "wheat-free",
+      "wheat free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "gluten",
+    "label": "Gluten",
+    "terms": [
+      "gluten",
+      "barley",
+      "rye",
+      "malt",
+      "triticale"
+    ],
+    "possibleTerms": [
+      "modified food starch",
+      "dextrin"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "gluten-free",
+      "gluten free"
+    ],
+    "impliedBy": [
+      "wheat"
+    ]
+  },
+  {
+    "id": "tree_nut",
+    "label": "Tree nuts",
+    "terms": [
+      "almond",
+      "cashew",
+      "walnut",
+      "pecan",
+      "pistachio",
+      "hazelnut",
+      "macadamia",
+      "chestnut",
+      "tree nut",
+      "nuts"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "water chestnut"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "phosphate_additives",
+    "label": "Phosphate additives",
+    "terms": [
+      "phosphoric acid",
+      "sodium phosphate",
+      "calcium phosphate",
+      "potassium phosphate",
+      "sodium tripolyphosphate"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E338",
+      "E339",
+      "E340",
+      "E341",
+      "E450",
+      "E451",
+      "E452"
+    ],
+    "excludePhrases": [],
+    "impliedBy": []
+  },
+  {
+    "id": "meat",
+    "label": "Meat and poultry",
+    "terms": [
+      "beef",
+      "pork",
+      "chicken",
+      "turkey",
+      "lamb",
+      "bacon",
+      "ham"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [],
+    "impliedBy": []
+  }
+]

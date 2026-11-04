@@ -1,0 +1,11 @@
+# Cloudflare Worker config for the Sift API. Secrets (USDA_API_KEY) are not stored here.
+name = "sift-api"
+main = "src/worker.ts"
+compatibility_date = "2026-10-01"
+
+[[kv_namespaces]]
+binding = "PRODUCT_CACHE"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"   # from: npx wrangler kv namespace create PRODUCT_CACHE
+
+[vars]
+USER_AGENT = "Sift/0.1.0 (REPLACE_WITH_CONTACT_EMAIL)"  # Open Food Facts asks for a contact here

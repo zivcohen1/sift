@@ -1,13 +1,17 @@
 /**
- * Sift: USDA FoodData Central reader (standalone, no other files needed).
+ * Sift: USDA FoodData Central reader.
  *
  * Searches USDA's "Branded Foods" data by barcode. We use it when Open Food Facts
  * has a product but no nutrition panel, or does not know the barcode at all.
  * USDA records include the label's ingredient list and nutrients per 100 g.
  *
+ * Needs sourceErrors.ts in the same folder.
  * Needs a free key from https://api.data.gov/signup/ ("DEMO_KEY" works for a few tests).
-
  */
+
+import { SourceUnavailableError } from "./sourceErrors";
+
+export { SourceUnavailableError };
 
 export interface UsdaProduct {
   barcode: string;
@@ -18,15 +22,6 @@ export interface UsdaProduct {
   nutrition: { basis: "per_100g"; values: Record<string, number> } | null;
   servingSize?: string;
   sourceUrl: string;
-}
-
-export class SourceUnavailableError extends Error {
-  constructor(
-    message: string,
-    public httpStatus?: number,
-  ) {
-    super(message);
-  }
 }
 
 const BASE_URL = "https://api.nal.usda.gov/fdc/v1";
@@ -77,6 +72,7 @@ function readNutrition(food: UsdaFood): UsdaProduct["nutrition"] {
   const values: Record<string, number> = {};
   for (const n of food.foodNutrients ?? []) {
     const key = n.nutrientId !== undefined ? NUTRIENTS[n.nutrientId] : undefined;
+    // Skip null or non-numeric values rather than reading them as zero.
     if (!key || typeof n.value !== "number" || !n.unitName) continue;
     const v = convert(key, n.value, n.unitName);
     if (v !== null) values[key] = Math.round(v * 1000) / 1000;
@@ -97,40 +93,50 @@ export async function fetchUsdaByBarcode(
     pageSize: "5",
   });
 
+  // The timer covers the whole request, including reading the body, so a stalled body
+  // cannot hang a scan. It is cleared only after the last read finishes.
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  let res: Response;
   try {
-    res = await fetchFn(`${BASE_URL}/foods/search?${params}`, {
-      headers: { Accept: "application/json" },
-      signal: controller.signal,
-    });
-  } catch (err) {
-    throw new SourceUnavailableError(`USDA request failed: ${(err as Error).message}`);
+    let res: Response;
+    try {
+      res = await fetchFn(`${BASE_URL}/foods/search?${params}`, {
+        headers: { Accept: "application/json" },
+        signal: controller.signal,
+      });
+    } catch (err) {
+      throw new SourceUnavailableError(`USDA request failed: ${(err as Error).message}`);
+    }
+    if (res.status === 429 || res.status === 503)
+      throw new SourceUnavailableError("Rate limited by USDA", res.status);
+    if (!res.ok) throw new SourceUnavailableError(`USDA HTTP ${res.status}`, res.status);
+
+    let body: { foods?: UsdaFood[] };
+    try {
+      body = (await res.json()) as { foods?: UsdaFood[] };
+    } catch (err) {
+      throw new SourceUnavailableError(`USDA sent a bad response: ${(err as Error).message}`);
+    }
+
+    // The search is full-text and can return near-misses, so only accept an exact barcode match.
+    const food = (body.foods ?? []).find((f) => f.gtinUpc && sameBarcode(f.gtinUpc, barcode));
+    if (!food) return null;
+
+    return {
+      barcode,
+      fdcId: food.fdcId,
+      name: food.description,
+      brand: food.brandName ?? food.brandOwner,
+      ingredientsText: food.ingredients,
+      nutrition: readNutrition(food),
+      servingSize:
+        food.householdServingFullText ??
+        (food.servingSize ? `${food.servingSize} ${food.servingSizeUnit ?? ""}`.trim() : undefined),
+      sourceUrl: `https://fdc.nal.usda.gov/food-details/${food.fdcId}/nutrients`,
+    };
   } finally {
     clearTimeout(timer);
   }
-  if (res.status === 429 || res.status === 503)
-    throw new SourceUnavailableError("Rate limited by USDA", res.status);
-  if (!res.ok) throw new SourceUnavailableError(`USDA HTTP ${res.status}`, res.status);
-
-  const body = (await res.json()) as { foods?: UsdaFood[] };
-  // The search is full-text and can return near-misses, so only accept an exact barcode match.
-  const food = (body.foods ?? []).find((f) => f.gtinUpc && sameBarcode(f.gtinUpc, barcode));
-  if (!food) return null;
-
-  return {
-    barcode,
-    fdcId: food.fdcId,
-    name: food.description,
-    brand: food.brandName ?? food.brandOwner,
-    ingredientsText: food.ingredients,
-    nutrition: readNutrition(food),
-    servingSize:
-      food.householdServingFullText ??
-      (food.servingSize ? `${food.servingSize} ${food.servingSizeUnit ?? ""}`.trim() : undefined),
-    sourceUrl: `https://fdc.nal.usda.gov/food-details/${food.fdcId}/nutrients`,
-  };
 }
 
 /* ---- Run directly to try it: npx tsx usda.ts <barcode> ---- */

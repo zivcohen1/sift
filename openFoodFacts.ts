@@ -1,9 +1,11 @@
 /**
- * Sift: Open Food Facts reader (standalone, no other files needed).
+ * Sift: Open Food Facts reader.
  *
  * Looks a barcode up in Open Food Facts, the free, open product database, and
  * returns the parts Sift needs: ingredients, allergen tags, label tags (this is
  * where kosher / halal certifications appear) and nutrition per 100 g.
+ *
+ * Needs sourceErrors.ts in the same folder.
  *
  * Try it (Windows PowerShell, macOS or Linux, Node 20+):
  *   npx tsx openFoodFacts.ts 3017620422003
@@ -12,6 +14,10 @@
  *   - send a User-Agent "AppName/Version (ContactEmail)"
  *   - at most 15 product reads per minute per IP (the backend will cache results)
  */
+
+import { SourceUnavailableError } from "./sourceErrors";
+
+export { SourceUnavailableError };
 
 export interface Nutrition {
   basis: "per_100g";
@@ -32,16 +38,6 @@ export interface FoodProduct {
   nutrition: Nutrition | null;
   servingSize?: string;
   sourceUrl: string;
-}
-
-/** The database is down, slow or rate-limiting us. The app should fall back to a label photo. */
-export class SourceUnavailableError extends Error {
-  constructor(
-    message: string,
-    public httpStatus?: number,
-  ) {
-    super(message);
-  }
 }
 
 const BASE_URL = "https://world.openfoodfacts.org";
@@ -86,7 +82,7 @@ export function isValidBarcode(code: string): boolean {
   const digits = code.split("").map(Number);
   const check = digits.pop()!;
   let sum = 0;
-  for (let i = digits.length - 1, w = 3; i >= 0; i--, w = w === 3 ? 1 : 3) sum += digits[i] * w;
+  for (let i = digits.length - 1, w = 3; i >= 0; i--, w = w === 3 ? 1 : 3) sum += digits[i]! * w;
   return (10 - (sum % 10)) % 10 === check;
 }
 
@@ -98,10 +94,11 @@ function readNutrition(nutriments: Record<string, unknown> | undefined): Nutriti
   if (!nutriments) return null;
   const values: Record<string, number> = {};
   for (const [offKey, key, factor] of NUTRIENTS) {
-    const n = Number(nutriments[offKey]);
-    if (nutriments[offKey] !== undefined && Number.isFinite(n)) {
-      values[key] = Math.round(n * factor * 1000) / 1000;
-    }
+    const raw = nutriments[offKey];
+    // A missing value is not zero. Number(null) and Number("") are both 0, so skip those first.
+    if (raw === undefined || raw === null || raw === "") continue;
+    const n = Number(raw);
+    if (Number.isFinite(n)) values[key] = Math.round(n * factor * 1000) / 1000;
   }
   return Object.keys(values).length ? { basis: "per_100g", values } : null;
 }
@@ -126,49 +123,59 @@ export async function fetchOffProduct(
   if (!isValidBarcode(barcode)) throw new Error(`Not a valid barcode: ${barcode}`);
   const url = `${BASE_URL}/api/v3/product/${barcode}.json?fields=${FIELDS.join(",")}`;
 
+  // The timer covers the whole request, including reading the body, so a stalled body
+  // cannot hang a scan. It is cleared only after the last read finishes.
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  let res: Response;
   try {
-    res = await fetchFn(url, {
-      headers: { "User-Agent": userAgent, Accept: "application/json" },
-      signal: controller.signal,
-    });
-  } catch (err) {
-    throw new SourceUnavailableError(`Open Food Facts request failed: ${(err as Error).message}`);
+    let res: Response;
+    try {
+      res = await fetchFn(url, {
+        headers: { "User-Agent": userAgent, Accept: "application/json" },
+        signal: controller.signal,
+      });
+    } catch (err) {
+      throw new SourceUnavailableError(`Open Food Facts request failed: ${(err as Error).message}`);
+    }
+
+    if (res.status === 404) return null;
+    if (res.status === 429 || res.status === 503) {
+      throw new SourceUnavailableError("Rate limited by Open Food Facts", res.status);
+    }
+    if (!res.ok) throw new SourceUnavailableError(`Open Food Facts HTTP ${res.status}`, res.status);
+
+    let body: Record<string, unknown>;
+    try {
+      body = (await res.json()) as Record<string, unknown>;
+    } catch (err) {
+      throw new SourceUnavailableError(`Open Food Facts sent a bad response: ${(err as Error).message}`);
+    }
+
+    const p = body.product as Record<string, unknown> | undefined;
+    // API v3 answers status "success"; the older v2 answers status 1.
+    const found =
+      !!p &&
+      (body.status === "success" || body.status === "success_with_warnings" || body.status === 1);
+    if (!found) return null;
+
+    return {
+      barcode: text(p!.code) ?? barcode,
+      name: text(p!.product_name_en) ?? text(p!.product_name),
+      brand: text(p!.brands),
+      imageUrl: text(p!.image_front_url),
+      ingredientsText: text(p!.ingredients_text_en) ?? text(p!.ingredients_text),
+      labelsText: text(p!.labels),
+      allergenTags: list(p!.allergens_tags),
+      traceTags: list(p!.traces_tags),
+      labelTags: list(p!.labels_tags),
+      additiveTags: list(p!.additives_tags),
+      nutrition: readNutrition(p!.nutriments as Record<string, unknown> | undefined),
+      servingSize: text(p!.serving_size),
+      sourceUrl: `${BASE_URL}/product/${barcode}`,
+    };
   } finally {
     clearTimeout(timer);
   }
-
-  if (res.status === 404) return null;
-  if (res.status === 429 || res.status === 503) {
-    throw new SourceUnavailableError("Rate limited by Open Food Facts", res.status);
-  }
-  if (!res.ok) throw new SourceUnavailableError(`Open Food Facts HTTP ${res.status}`, res.status);
-
-  const body = (await res.json()) as Record<string, unknown>;
-  const p = body.product as Record<string, unknown> | undefined;
-  // API v3 answers status "success"; the older v2 answers status 1.
-  const found =
-    !!p &&
-    (body.status === "success" || body.status === "success_with_warnings" || body.status === 1);
-  if (!found) return null;
-
-  return {
-    barcode: text(p!.code) ?? barcode,
-    name: text(p!.product_name_en) ?? text(p!.product_name),
-    brand: text(p!.brands),
-    imageUrl: text(p!.image_front_url),
-    ingredientsText: text(p!.ingredients_text_en) ?? text(p!.ingredients_text),
-    labelsText: text(p!.labels),
-    allergenTags: list(p!.allergens_tags),
-    traceTags: list(p!.traces_tags),
-    labelTags: list(p!.labels_tags),
-    additiveTags: list(p!.additives_tags),
-    nutrition: readNutrition(p!.nutriments as Record<string, unknown> | undefined),
-    servingSize: text(p!.serving_size),
-    sourceUrl: `${BASE_URL}/product/${barcode}`,
-  };
 }
 
 /* ---- Run directly to try it: npx tsx openFoodFacts.ts <barcode> ---- */

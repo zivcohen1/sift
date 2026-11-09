@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import worker, { handle, sameKey, APP_KEY_HEADER, MAX_BODY_BYTES, type Env } from "../src/worker";
+import worker, { handle, MAX_BODY_BYTES, type Env } from "../src/worker";
 
 const BARCODE = "3017620422003"; // valid check digit, used in openFoodFacts.ts examples
 
@@ -33,18 +33,11 @@ const env = (kv?: ReturnType<typeof memoryKv>): Env => ({
   PRODUCT_CACHE: kv,
   USDA_API_KEY: "test-key",
   USER_AGENT: "Sift/test (test@example.com)",
-  APP_KEY: APP_KEY,
 });
 
-const APP_KEY = "test-app-key";
-const get = (path: string, key: string | null = APP_KEY) =>
-  new Request(`https://api.test${path}`, { method: "GET", headers: key === null ? {} : { [APP_KEY_HEADER]: key } });
-const post = (path: string, body: string, key: string | null = APP_KEY) =>
-  new Request(`https://api.test${path}`, {
-    method: "POST",
-    body,
-    headers: { "content-type": "application/json", ...(key === null ? {} : { [APP_KEY_HEADER]: key }) },
-  });
+const get = (path: string) => new Request(`https://api.test${path}`, { method: "GET" });
+const post = (path: string, body: string) =>
+  new Request(`https://api.test${path}`, { method: "POST", body, headers: { "content-type": "application/json" } });
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -110,36 +103,14 @@ describe("GET /v1/product/{barcode}", () => {
   });
 });
 
-describe("app key (Section 3.5)", () => {
-  it("rejects /v1 requests with a missing or wrong key before calling any source", async () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-    for (const key of [null, "", "wrong", `${APP_KEY}x`]) {
-      const res = await handle(get(`/v1/product/${BARCODE}`, key), env());
-      expect(res.status).toBe(401);
-      expect(await res.json()).toEqual({ error: "unauthorized" });
-    }
-    expect((await handle(get("/v1/reference", null), env())).status).toBe(401);
-    expect((await handle(post("/v1/ingredients/analyze", "{}", "wrong"), env())).status).toBe(401);
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-
-  it("fails closed with 500 when APP_KEY is not configured", async () => {
-    const res = await handle(get("/v1/reference"), { ...env(), APP_KEY: "" });
-    expect(res.status).toBe(500);
-    expect(await res.json()).toEqual({ error: "server_misconfigured" });
-  });
-
-  it("does not need a key for /health", async () => {
-    expect((await handle(get("/health", null), env())).status).toBe(200);
-  });
-
-  it("compares keys exactly", () => {
-    expect(sameKey("abc", "abc")).toBe(true);
-    expect(sameKey("abd", "abc")).toBe(false);
-    expect(sameKey("ab", "abc")).toBe(false);
-    expect(sameKey("abcd", "abc")).toBe(false);
-    expect(sameKey(null, "abc")).toBe(false);
+describe("no app key", () => {
+  it("answers the website without any key header", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json(200, offProduct)));
+    const res = await handle(get(`/v1/product/${BARCODE}`), env(memoryKv()));
+    expect(res.status).toBe(200);
+    expect(res.headers.get("access-control-allow-origin")).toBe("*");
+    expect((await handle(get("/v1/reference"), env())).status).toBe(200);
+    expect((await handle(get("/health"), env())).status).toBe(200);
   });
 });
 
@@ -229,10 +200,10 @@ describe("POST /v1/ingredients/analyze", () => {
 });
 
 describe("CORS preflight", () => {
-  it("allows the app-key header", async () => {
+  it("lets the website send JSON", async () => {
     const res = await handle(new Request("https://api.test/v1/ingredients/analyze", { method: "OPTIONS" }), env());
     expect(res.status).toBe(204);
-    expect(res.headers.get("access-control-allow-headers")).toContain(APP_KEY_HEADER);
+    expect(res.headers.get("access-control-allow-headers")).toContain("content-type");
     expect(res.headers.get("access-control-allow-methods")).toContain("POST");
   });
 });

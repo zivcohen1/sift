@@ -49,6 +49,24 @@ const MARK_AGENCIES: Record<string, { id: string; name: string }> = {
   cRc: { id: "crc", name: "cRc" },
 };
 
+export interface KnownAgency {
+  id: string;
+  name: string;
+  scheme: Scheme;
+}
+
+/**
+ * Every agency the evidence readers can recognise, for GET /v1/reference. Built from the
+ * same tables collectCertifications uses, so the app's certifier picker can never offer an
+ * agency the backend would not detect.
+ */
+export function listKnownAgencies(): KnownAgency[] {
+  const byKey = new Map<string, KnownAgency>();
+  for (const a of TAG_AGENCIES) byKey.set(`${a.scheme}:${a.id}`, { id: a.id, name: a.name, scheme: a.scheme });
+  for (const a of Object.values(MARK_AGENCIES)) byKey.set(`kosher:${a.id}`, { ...a, scheme: "kosher" });
+  return [...byKey.values()].sort((x, y) => x.scheme.localeCompare(y.scheme) || x.name.localeCompare(y.name));
+}
+
 /**
  * Collect certification evidence for one scheme (Table 7 of the design document).
  * Label tags and free text are crowd-sourced, so a named agency is medium confidence;

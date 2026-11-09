@@ -9,7 +9,7 @@ decision. Pure functions, no network, no user data.
 ```bash
 cd backend
 npm install
-npm test           # 84 unit tests
+npm test           # 103 unit tests
 npm run typecheck
 ```
 
@@ -93,3 +93,35 @@ shape changes on purpose: `UPDATE_CONTRACT=1 npx vitest run` in `backend/`, then
 ## Knowledge-base data
 
 `data/*.json` here is a small sample. Do not overwrite the real knowledge base with it.
+
+
+## Worker routes
+
+| Route | App key | Purpose |
+|---|---|---|
+| `GET /health` | no | `{ ok, kbVersion }` |
+| `GET /v1/reference` | yes | `kbVersion`, `categories` (`id`, `label`), `kosherAgencies`, `halalCertifiers` |
+| `GET /v1/product/{barcode}` | yes | Lookup and enrichment (see above) |
+| `POST /v1/ingredients/analyze` | yes | Body `{ ingredientText, packageText? }` → `{ source: "label_photo", enriched }`, same shape as a barcode scan |
+
+The app sends the key in the `x-sift-app-key` header. A missing or wrong key is `401`; a
+Worker with no `APP_KEY` secret answers `500 server_misconfigured` rather than running open.
+Analyze bodies are capped at 16 KB (`413`), and validation errors list field names only, never
+the submitted text. Agencies in `/v1/reference` come from the same tables the certification
+reader uses (`listKnownAgencies` in `src/enrich/fromSource.ts`).
+
+Local runs: create `backend/.dev.vars` (git-ignored) with
+
+```
+USDA_API_KEY=...
+APP_KEY=...
+```
+
+then `npx wrangler dev` and, for example,
+
+```bash
+curl localhost:8787/health
+curl -H "x-sift-app-key: $APP_KEY" localhost:8787/v1/reference
+curl -X POST -H "x-sift-app-key: $APP_KEY" -H "content-type: application/json" \
+  -d '{"ingredientText":"sugar, whey, natural flavors"}' localhost:8787/v1/ingredients/analyze
+```

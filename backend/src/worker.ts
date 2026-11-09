@@ -2,20 +2,19 @@
  * Sift API: Cloudflare Worker entry point.
  *
  * Routes (Table 2 of the design document):
- *   GET  /health                   liveness and knowledge-base version (no app key needed)
+ *   GET  /health                   liveness and knowledge-base version
  *   GET  /v1/reference             categories and recognised kosher/halal agencies
  *   GET  /v1/product/{barcode}     lookupProduct (KV cache, then Open Food Facts, then USDA)
  *   POST /v1/ingredients/analyze   ProductFacts for label text read on the phone
  *
- * Every /v1 route needs the `x-sift-app-key` header (Section 3.5). This stops casual abuse;
- * it is not strong authentication (production would add Apple App Attest).
+ * The routes are open (no app key). The website calls them straight from the browser, where a
+ * shared key could not be kept secret anyway; production would add Apple App Attest.
  *
  * Setup (once):
  *   1. npx wrangler kv namespace create PRODUCT_CACHE      -> paste the id into wrangler.toml
  *   2. npx wrangler secret put USDA_API_KEY                -> key from https://api.data.gov/signup/
- *   3. npx wrangler secret put APP_KEY                     -> any long random string; the app sends it
- *   4. set USER_AGENT in wrangler.toml to "Sift/<version> (<contact>)" as Open Food Facts asks
- * Run locally:  put USDA_API_KEY and APP_KEY in backend/.dev.vars, then npx wrangler dev
+ *   3. set USER_AGENT in wrangler.toml to "Sift/<version> (<contact>)" as Open Food Facts asks
+ * Run locally:  put USDA_API_KEY in backend/.dev.vars, then npx wrangler dev
  * Deploy:       npx wrangler deploy
  */
 
@@ -31,11 +30,8 @@ export interface Env {
   PRODUCT_CACHE?: KvLike;
   USDA_API_KEY: string;
   USER_AGENT: string;
-  /** Shared app key the iPhone app sends in `x-sift-app-key`. Worker secret. */
-  APP_KEY: string;
 }
 
-export const APP_KEY_HEADER = "x-sift-app-key";
 /** Label text is short; anything bigger is not an ingredient statement. */
 export const MAX_BODY_BYTES = 16 * 1024;
 
@@ -76,16 +72,6 @@ export function toResponse(result: LookupResult): Response {
     case "sources_unavailable":
       return json(503, { error: "sources_unavailable", next: result.next });
   }
-}
-
-/** Compare without stopping at the first different character, so timing does not leak the key. */
-export function sameKey(given: string | null, expected: string): boolean {
-  if (given === null) return false;
-  const a = new TextEncoder().encode(given);
-  const b = new TextEncoder().encode(expected);
-  let diff = a.length ^ b.length;
-  for (let i = 0; i < b.length; i++) diff |= (a[i] ?? 0) ^ b[i]!;
-  return diff === 0;
 }
 
 // ---- Route handlers --------------------------------------------------------------------
@@ -151,17 +137,15 @@ type Handler = (request: Request, env: Env, params: string[]) => Promise<Respons
 interface Route {
   method: "GET" | "POST";
   pattern: RegExp;
-  needsAppKey: boolean;
   handler: Handler;
 }
 
 const ROUTES: Route[] = [
-  { method: "GET", pattern: /^\/health$/, needsAppKey: false, handler: () => health() },
-  { method: "GET", pattern: /^\/v1\/reference$/, needsAppKey: true, handler: () => reference() },
+  { method: "GET", pattern: /^\/health$/, handler: () => health() },
+  { method: "GET", pattern: /^\/v1\/reference$/, handler: () => reference() },
   {
     method: "GET",
     pattern: /^\/v1\/product\/([^/]+)$/,
-    needsAppKey: true,
     handler: async (_req, env, [rawBarcode]) => {
       if (!env.USDA_API_KEY || !env.USER_AGENT) return json(500, { error: "server_misconfigured" });
       let barcode: string;
@@ -173,7 +157,7 @@ const ROUTES: Route[] = [
       return toResponse(await lookupProduct(barcode, makeDeps(env)));
     },
   },
-  { method: "POST", pattern: /^\/v1\/ingredients\/analyze$/, needsAppKey: true, handler: (req) => analyzeIngredients(req) },
+  { method: "POST", pattern: /^\/v1\/ingredients\/analyze$/, handler: (req) => analyzeIngredients(req) },
 ];
 
 export async function handle(request: Request, env: Env): Promise<Response> {
@@ -189,7 +173,7 @@ export async function handle(request: Request, env: Env): Promise<Response> {
       headers: {
         "access-control-allow-origin": "*",
         "access-control-allow-methods": [...allowed, "OPTIONS"].join(", "),
-        "access-control-allow-headers": `content-type, ${APP_KEY_HEADER}`,
+        "access-control-allow-headers": "content-type",
         "access-control-max-age": "86400",
       },
     });
@@ -197,11 +181,6 @@ export async function handle(request: Request, env: Env): Promise<Response> {
 
   const route = matching.find((r) => r.method === request.method);
   if (!route) return json(405, { error: "method_not_allowed" }, { allow: allowed.join(", ") });
-
-  if (route.needsAppKey) {
-    if (!env.APP_KEY) return json(500, { error: "server_misconfigured" });
-    if (!sameKey(request.headers.get(APP_KEY_HEADER), env.APP_KEY)) return json(401, { error: "unauthorized" });
-  }
 
   const params = route.pattern.exec(path)!.slice(1);
   return route.handler(request, env, params);

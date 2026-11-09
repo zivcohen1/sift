@@ -1,0 +1,10 @@
+// Cloudflare hosting for the Sift website: a Worker that only serves the built files in dist/.
+// Deploy from this folder with:  npm run deploy
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "sift-web",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}

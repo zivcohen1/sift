@@ -23,7 +23,11 @@ export interface Env {
   USER_AGENT: string;
 }
 
-const JSON_HEADERS = { "content-type": "application/json; charset=utf-8" };
+
+const JSON_HEADERS = {
+  "content-type": "application/json; charset=utf-8",
+  "access-control-allow-origin": "*",
+};
 
 function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });

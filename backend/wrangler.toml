@@ -1,6 +1,5 @@
-# Cloudflare Worker config for the Sift API. Secrets (USDA_API_KEY, APP_KEY) are not stored here:
+# Cloudflare Worker config for the Sift API. The secret USDA_API_KEY is not stored here:
 #   npx wrangler secret put USDA_API_KEY
-#   npx wrangler secret put APP_KEY
 name = "sift-api"
 main = "src/worker.ts"
 compatibility_date = "2026-10-01"

@@ -28,7 +28,7 @@ There is no root npm package. Run commands from `web/` or `backend/` as shown be
 
 - Node.js 24 with npm.
 - A Cloudflare account to configure or deploy the Workers.
-- A USDA API key and a shared application key to run the backend product routes.
+- A USDA API key to run the backend product routes.
 
 ## Run the web app
 
@@ -46,9 +46,6 @@ localhost; a hosted site needs HTTPS. You can also enter barcodes manually.
 The app uses `https://sift-api.siftmu.workers.dev` by default. For a local backend, change
 the proxy target in `web/vite.config.ts`. For production, set `VITE_API_BASE` at build time
 to use a different API.
-
-**Known issue:** the backend requires an `x-sift-app-key` header, but the web app does not
-send it yet. Product lookups against this backend return HTTP 401 until this is fixed.
 
 See [the web README](web/README.md) for the screen descriptions and hosting details.
 
@@ -70,11 +67,10 @@ Create `backend/.dev.vars` with your local values:
 
 ```dotenv
 USDA_API_KEY=your_usda_api_key
-APP_KEY=your_shared_application_key
 ```
 
 This file is git-ignored. Obtain a USDA key from [api.data.gov](https://api.data.gov/signup/).
-The client must send the same `APP_KEY` value in the `x-sift-app-key` header.
+The API routes are open and do not require an app key.
 
 Start the Worker from `backend/`:
 
@@ -88,12 +84,12 @@ Check the health route (adjust the port if Wrangler uses a different one):
 curl http://localhost:8787/health
 ```
 
-| Route | Requires app key | Purpose |
-|---|---|---|
-| `GET /health` | No | Health status and knowledge-base version |
-| `GET /v1/reference` | Yes | Categories and recognized certifiers |
-| `GET /v1/product/{barcode}` | Yes | Product lookup and enriched ingredient facts |
-| `POST /v1/ingredients/analyze` | Yes | Analyze JSON containing `ingredientText` and optional `packageText` |
+| Route | Purpose |
+|---|---|
+| `GET /health` | Health status and knowledge-base version |
+| `GET /v1/reference` | Categories and recognized certifiers |
+| `GET /v1/product/{barcode}` | Product lookup and enriched ingredient facts |
+| `POST /v1/ingredients/analyze` | Analyze JSON containing `ingredientText` and optional `packageText` |
 
 The analysis route accepts text; it does not read a photograph itself.
 
@@ -139,7 +135,6 @@ deploy from `backend/`:
 
 ```sh
 npx wrangler secret put USDA_API_KEY
-npx wrangler secret put APP_KEY
 npx wrangler deploy
 ```
 
@@ -150,13 +145,12 @@ Cloudflare:
 npm run deploy
 ```
 
-This builds and deploys the website. Product lookups still need the app-key fix noted above.
+This builds and deploys the website.
 
 ## Open work
 
 - Replace the placeholder KV namespace ID and contact email in `backend/wrangler.toml`.
 - Replace and validate the sample knowledge base in `backend/data/`; update `KB_VERSION`
   in `backend/src/refdata.ts` when publishing a new version.
-- Resolve authentication between the web client and the protected API routes.
 - Connect a label-photo reading flow and the ambiguous-ingredient AI check to the web UI.
 - Add profile export/import if profiles should transfer between browsers or devices.

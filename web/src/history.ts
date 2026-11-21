@@ -1,4 +1,4 @@
-/** Saved scans ("Library"). Kept only in this browser, newest first, at most 50. */
+/** Recent lookups, saved automatically in this browser, newest first, at most 50 products. */
 import { readJson, removeKey, writeJson, type KeyValueStore } from "./storage";
 import type { Level } from "./ruleEngine";
 
@@ -11,7 +11,7 @@ export interface HistoryEntry {
   savedAt: string; // ISO date
 }
 
-const KEY = "sift.history.v1";
+const KEY = "sift.recent.v1";
 const MAX = 50;
 
 export function loadHistory(store?: KeyValueStore | null): HistoryEntry[] {

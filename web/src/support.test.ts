@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { lookupBarcode } from "./api";
 import { cleanTypedCode, isValidBarcode, normalizeScannedCode } from "./barcode";
-import { addToHistory, loadHistory } from "./history";
+import { addToHistory, clearHistory, loadHistory } from "./history";
+import { addToFavorites, clearFavorites, loadFavorites } from "./favorites";
 import { DEFAULT_PROFILE, loadProfile, saveProfile, toggle } from "./profile";
 import type { KeyValueStore } from "./storage";
 
@@ -50,6 +51,33 @@ describe("profile storage (this browser only)", () => {
 });
 
 describe("history", () => {
+  it("preserves old manual saves as favorites and keeps recent scans separate", () => {
+    const store = memoryStore();
+    const saved = { barcode: "1", level: "good" as const, headline: "saved", savedAt: "2026-11-20" };
+    store.setItem("sift.history.v1", JSON.stringify([saved]));
+    expect(loadFavorites(store)).toEqual([saved]);
+    expect(loadHistory(store)).toEqual([]);
+    addToHistory({ ...saved, barcode: "2" }, store);
+    clearHistory(store);
+    expect(loadFavorites(store)).toEqual([saved]);
+    addToHistory(saved, store);
+    clearFavorites(store);
+    expect(loadHistory(store)).toEqual([saved]);
+  });
+
+  it("limits recents to 50 while favorites remain independently saved", () => {
+    const store = memoryStore();
+    for (let i = 0; i < 55; i++) {
+      addToHistory({ barcode: String(i), level: "not_sure", headline: "Lookup unavailable", savedAt: "2026-11-20" }, store);
+    }
+    expect(loadHistory(store)).toHaveLength(50);
+    expect(loadHistory(store)[0]?.barcode).toBe("54");
+    const entry = loadHistory(store)[0]!;
+    addToFavorites(entry, store);
+    addToFavorites(entry, store);
+    expect(loadFavorites(store)).toEqual([entry]);
+  });
+
   it("keeps the newest scan first and one entry per barcode", () => {
     const store = memoryStore();
     const e = (barcode: string, savedAt: string) => ({ barcode, level: "good" as const, headline: "x", savedAt });

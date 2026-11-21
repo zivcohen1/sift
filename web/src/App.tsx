@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { lookupBarcode } from "./api";
+import { checkIngredientData } from "./ingredientData";
 import { cleanTypedCode, isValidBarcode } from "./barcode";
 import { addToHistory, clearHistory, loadHistory, type HistoryEntry } from "./history";
+import { addToFavorites, clearFavorites, loadFavorites } from "./favorites";
 import { eraseProfile, hasRestrictions, loadProfile, saveProfile, type Profile } from "./profile";
 import { decideVerdict } from "./ruleEngine";
 import { HistoryScreen } from "./screens/HistoryScreen";
@@ -10,7 +12,7 @@ import { ScanScreen } from "./screens/ScanScreen";
 import { headlineOf, VerdictScreen } from "./screens/VerdictScreen";
 import type { ProductResponse } from "./types";
 
-type Screen = "scan" | "verdict" | "profile" | "history";
+type Screen = "scan" | "verdict" | "profile" | "history" | "favorites";
 
 export function App() {
   const [screen, setScreen] = useState<Screen>("scan");
@@ -18,12 +20,14 @@ export function App() {
   const [profile, setProfile] = useState<Profile>(() => loadProfile());
   const [history, setHistory] = useState<HistoryEntry[]>(() => loadHistory());
   const [result, setResult] = useState<ProductResponse | null>(null);
-  const [savedBarcode, setSavedBarcode] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<HistoryEntry[]>(() => loadFavorites());
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   // The verdict is recomputed whenever the profile changes, on this device only.
-  const verdict = useMemo(() => (result ? decideVerdict(result.enriched, profile) : null), [result, profile]);
+  const verdict = useMemo(() => (result ? decideVerdict(
+    result.enriched, profile, checkIngredientData(result.product, result.enriched).hasConflict,
+  ) : null), [result, profile]);
 
   const go = (next: Screen) => {
     setReturnTo(screen);
@@ -48,7 +52,16 @@ export function App() {
     setBusy(false);
     if (res.kind === "found") {
       setResult(res.data);
-      setSavedBarcode(null);
+      const currentVerdict = decideVerdict(res.data.enriched, profile,
+        checkIngredientData(res.data.product, res.data.enriched).hasConflict);
+      setHistory(addToHistory({
+        barcode: res.data.barcode,
+        name: res.data.product.name,
+        brand: res.data.product.brand,
+        level: currentVerdict.level,
+        headline: headlineOf(currentVerdict),
+        savedAt: new Date().toISOString(),
+      }));
       setScreen("verdict");
     } else if (res.kind === "not_found") {
       setMessage(`${code} isn't in Open Food Facts or USDA yet. Check the package yourself for now.`);
@@ -57,12 +70,21 @@ export function App() {
     } else {
       setMessage(res.message);
     }
+    if (res.kind !== "found") {
+      setHistory(addToHistory({
+        barcode: code,
+        level: "not_sure",
+        headline: res.kind === "not_found" ? "Product not found" :
+          res.kind === "invalid_barcode" ? "Barcode not recognized" : "Lookup unavailable",
+        savedAt: new Date().toISOString(),
+      }));
+    }
   }
 
   const save = () => {
     if (!result || !verdict) return;
-    setHistory(
-      addToHistory({
+    setFavorites(
+      addToFavorites({
         barcode: result.barcode,
         name: result.product.name,
         brand: result.product.brand,
@@ -71,7 +93,6 @@ export function App() {
         savedAt: new Date().toISOString(),
       }),
     );
-    setSavedBarcode(result.barcode);
   };
 
   if (screen === "profile") {
@@ -81,9 +102,11 @@ export function App() {
         onChange={updateProfile}
         onBack={() => setScreen(returnTo === "profile" ? "scan" : returnTo)}
         onErase={() => {
-          if (!confirm("Erase your restrictions and history from this device?")) return;
+          if (!confirm("Erase your restrictions, history, and favorites from this device?")) return;
           eraseProfile();
           clearHistory();
+          clearFavorites();
+          setFavorites([]);
           setProfile(loadProfile());
           setHistory([]);
         }}
@@ -91,15 +114,21 @@ export function App() {
     );
   }
 
-  if (screen === "history") {
+  if (screen === "history" || screen === "favorites") {
     return (
       <HistoryScreen
-        history={history}
+        history={screen === "favorites" ? favorites : history}
+        favorites={screen === "favorites"}
         onBack={() => setScreen("scan")}
         onOpen={(barcode) => void lookup(barcode)}
         onClear={() => {
-          clearHistory();
-          setHistory([]);
+          if (screen === "favorites") {
+            clearFavorites();
+            setFavorites([]);
+          } else {
+            clearHistory();
+            setHistory([]);
+          }
         }}
       />
     );
@@ -111,7 +140,7 @@ export function App() {
         data={result}
         verdict={verdict}
         hasRestrictions={hasRestrictions(profile)}
-        saved={savedBarcode === result.barcode}
+        saved={favorites.some((entry) => entry.barcode === result.barcode)}
         onBack={() => setScreen("scan")}
         onSave={save}
         onOpenProfile={() => go("profile")}
@@ -127,6 +156,7 @@ export function App() {
       onLookup={(code) => void lookup(code)}
       onOpenProfile={() => go("profile")}
       onOpenHistory={() => go("history")}
+      onOpenFavorites={() => go("favorites")}
     />
   );
 }

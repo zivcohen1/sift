@@ -10,9 +10,10 @@ interface Props {
   onLookup: (code: string) => void;
   onOpenProfile: () => void;
   onOpenHistory: () => void;
+  onOpenFavorites: () => void;
 }
 
-export function ScanScreen({ busy, message, needsSetup, onLookup, onOpenProfile, onOpenHistory }: Props) {
+export function ScanScreen({ busy, message, needsSetup, onLookup, onOpenProfile, onOpenHistory, onOpenFavorites }: Props) {
   const [scanning, setScanning] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [typed, setTyped] = useState("");
@@ -76,6 +77,9 @@ export function ScanScreen({ busy, message, needsSetup, onLookup, onOpenProfile,
       <div className="actions">
         <button type="button" className="btn secondary" onClick={onOpenHistory}>
           History
+        </button>
+        <button type="button" className="btn secondary" onClick={onOpenFavorites}>
+          Favorites
         </button>
         {scanning ? (
           <button type="button" className="btn primary" onClick={() => setScanning(false)}>

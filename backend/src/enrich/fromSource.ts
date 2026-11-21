@@ -1,6 +1,7 @@
 import { loadKnowledgeBase } from "../refdata";
 import type { KnowledgeBase, ProductFacts, Scheme } from "../types";
 import { buildProductFacts } from "./index";
+import { ingredientDataQuality } from "./quality";
 import {
   assessReligious, findConcerns, meatDairyConcern, parseKosherMark,
   type Certification, type ReligiousAssessment,
@@ -121,6 +122,7 @@ export function enrichProduct(
   }
 
   const warnings: string[] = [];
+  if (ingredientDataQuality(src, kb).hasConflict) warnings.push("ingredient_data_conflict");
   if (!facts.hasIngredients) warnings.push("no_ingredient_list");
   if (!src.nutrition) warnings.push("no_nutrition_data");
   if (origin === "open_food_facts") warnings.push("crowd_sourced_check_the_package");

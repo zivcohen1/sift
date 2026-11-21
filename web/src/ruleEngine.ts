@@ -42,11 +42,21 @@ const lower = (s: string) => s.toLowerCase();
 const quoteList = (items: string[]) => items.map((i) => `"${i}"`).join(" and ");
 const unique = <T>(items: T[]) => [...new Set(items)];
 
-export function decideVerdict(enriched: EnrichedProduct, profile: Profile): Verdict {
+export function decideVerdict(enriched: EnrichedProduct, profile: Profile, ingredientDataConflict = false): Verdict {
   const { facts } = enriched;
   const doubtful: Level = profile.doubtfulPolicy;
   const avoided = new Set(profile.avoid);
   const findings: Finding[] = [];
+
+  if (ingredientDataConflict || enriched.warnings.includes("ingredient_data_conflict")) {
+    findings.push({
+      level: "not_sure",
+      title: "Ingredient data may be incomplete",
+      detail: "The database declares allergens that are not accounted for in its ingredient list. Check the full ingredient list and allergen statement on the package.",
+      source: "data",
+      marks: [],
+    });
+  }
 
   if (!facts.hasIngredients) {
     findings.push({

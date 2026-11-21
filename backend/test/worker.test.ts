@@ -32,10 +32,13 @@ const offProduct = {
 const env = (kv?: ReturnType<typeof memoryKv>): Env => ({
   PRODUCT_CACHE: kv,
   USDA_API_KEY: "test-key",
+  APP_KEY: "test-app-key",
   USER_AGENT: "Sift/test (test@example.com)",
 });
 
-const get = (path: string) => new Request(`https://api.test${path}`, { method: "GET" });
+const get = (path: string) => new Request(`https://api.test${path}`, {
+  method: "GET", headers: { "x-sift-app-key": "test-app-key" },
+});
 
 afterEach(() => vi.unstubAllGlobals());
 

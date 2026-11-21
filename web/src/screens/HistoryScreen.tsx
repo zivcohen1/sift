@@ -3,24 +3,25 @@ import { LEVEL_TEXT } from "../ruleEngine";
 
 interface Props {
   history: HistoryEntry[];
+  favorites?: boolean;
   onBack: () => void;
   onOpen: (barcode: string) => void;
   onClear: () => void;
 }
 
-export function HistoryScreen({ history, onBack, onOpen, onClear }: Props) {
+export function HistoryScreen({ history, favorites = false, onBack, onOpen, onClear }: Props) {
   return (
     <main className="screen light">
       <header className="topbar">
         <button type="button" className="link" onClick={onBack}>
           Back
         </button>
-        <span className="title">History</span>
+        <span className="title">{favorites ? "Favorites" : "History"}</span>
         <span className="spacer" />
       </header>
 
       {history.length === 0 ? (
-        <p className="lead">Scans you save appear here. They stay on this device.</p>
+        <p className="lead">{favorites ? "Products you favorite appear here." : "Recent scans appear here automatically, including products that could not be found."} They stay in this browser.</p>
       ) : (
         <>
           <p className="muted small">Tap a product to check it again with your current restrictions.</p>
@@ -40,7 +41,7 @@ export function HistoryScreen({ history, onBack, onOpen, onClear }: Props) {
             ))}
           </ul>
           <button type="button" className="erase" onClick={onClear}>
-            Clear history
+            Clear {favorites ? "favorites" : "history"}
           </button>
         </>
       )}

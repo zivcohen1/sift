@@ -68,6 +68,8 @@ export interface ProductInfo {
   brand?: string;
   imageUrl?: string;
   ingredientsText?: string;
+  allergenTags?: string[];
+  traceTags?: string[];
   sourceUrl?: string;
 }
 

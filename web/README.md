@@ -9,7 +9,13 @@ your restrictions. It follows the screens in `Sift UX UI Concept.pdf`.
   and every ingredient tagged.
 - **My restrictions** — categories to avoid, kosher/halal with the certifiers you accept, and
   what to do when Sift isn't sure.
-- **History** — saved scans.
+- **History** — recent scans saved automatically, newest first (up to 50 products), including unsuccessful lookups.
+- **Favorites** — products you choose to save from the verdict screen. Previously saved history appears here.
+
+The verdict screen shows declared allergens separately from the ingredient list. If a
+known allergen is declared but not accounted for in that list, Sift flags the data as
+possibly incomplete and returns at least "Not sure". This detects inconsistent evidence;
+it cannot verify that a recipe is complete, especially with the current sample knowledge base.
 
 The product data comes from the team's API (`backend/`, deployed at
 `https://sift-api.siftmu.workers.dev`). The verdict is decided **in the browser**, and the

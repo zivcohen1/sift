@@ -80,10 +80,10 @@ const result = await lookupProduct(barcode, {
 Cache rules: raw record kept 7 days (`src:v1:`), misses 1 day (`miss:v1:`), outages never
 cached, a miss is cached only if every source answered, and a broken KV never breaks a scan.
 
-## Swift side (not compiled in the environment that wrote it)
+## Swift side
 
 ```bash
-cd ios/SiftCore && swift test      # needs a Mac with Xcode
+cd ios/SiftCore && swift test      # needs Xcode with Swift 6 or newer and XCTest
 ```
 
 The contract test reads `contracts/enriched_sample.json` by walking five folders up from the

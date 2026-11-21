@@ -196,8 +196,11 @@ h2.caps {
 }
 .actions {
   display: grid;
-  grid-template-columns: 1fr 1.7fr;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
+}
+.actions > .primary {
+  grid-column: 1 / -1;
 }
 .btn {
   border: 0;

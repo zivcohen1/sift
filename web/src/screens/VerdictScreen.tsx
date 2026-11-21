@@ -1,5 +1,7 @@
 import { ingredientTag, LEVEL_TEXT, type Verdict } from "../ruleEngine";
 import type { ProductResponse } from "../types";
+import { checkIngredientData } from "../ingredientData";
+import { allergenLabel } from "../../../backend/src/enrich/quality";
 
 interface Props {
   data: ProductResponse;
@@ -24,6 +26,7 @@ export function VerdictScreen({ data, verdict, hasRestrictions, saved, onBack, o
   const top = verdict.findings[0];
   const others = verdict.level === "good" ? verdict.findings : verdict.findings.slice(1);
   const sources = data.sources.map((s) => SOURCE_NAMES[s] ?? s).join(" and ");
+  const quality = checkIngredientData(product, enriched);
 
   return (
     <main className="screen light">
@@ -74,9 +77,26 @@ export function VerdictScreen({ data, verdict, hasRestrictions, saved, onBack, o
         </>
       )}
 
+      {quality.hasConflict && (
+        <section className="card" aria-label="Ingredient data warning">
+          <h2>Check the full package label</h2>
+          <p>The database's ingredient list may be incomplete or inconsistent with its allergen declarations.
+            {quality.unlistedAllergens.length > 0 && ` Allergens not accounted for in the list: ${quality.unlistedAllergens.join(", ")}.`}
+            {" "}Sift cannot verify that this is the full recipe.</p>
+        </section>
+      )}
+
+      {(product.allergenTags?.length ?? 0) > 0 && (
+        <section aria-label="Declared allergens">
+          <h2>Declared allergens</h2>
+          <p>{product.allergenTags!.map(allergenLabel).join(", ")}</p>
+          <p className="muted small">Reported separately by the database. Check the package's allergen statement.</p>
+        </section>
+      )}
+
       {enriched.facts.ingredients.length > 0 && (
         <>
-          <h2>Ingredients checked</h2>
+          <h2>Ingredients reported by the database</h2>
           <ul className="list">
             {enriched.facts.ingredients.map((ingredient, i) => {
               const tag = ingredientTag(ingredient, verdict);
@@ -99,7 +119,7 @@ export function VerdictScreen({ data, verdict, hasRestrictions, saved, onBack, o
 
       <div className="bottom-bar">
         <button type="button" className="btn dark-btn" onClick={onSave} disabled={saved}>
-          {saved ? "Saved to history" : "Save to history"}
+          {saved ? "Added to favorites" : "Add to favorites"}
         </button>
       </div>
     </main>

@@ -112,7 +112,12 @@
         },
         {
           "ingredient": "meat with dairy",
-          "severity": "forbidden"
+          "severity": "forbidden",
+          "terms": [
+            "bacon",
+            "whey",
+            "milk"
+          ]
         }
       ],
       "summary": "Contains bacon, meat with dairy."

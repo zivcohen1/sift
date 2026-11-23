@@ -3,7 +3,7 @@ import type { KnowledgeBase, ProductFacts, Scheme } from "../types";
 import { buildProductFacts } from "./index";
 import { ingredientDataQuality } from "./quality";
 import {
-  assessReligious, findConcerns, meatDairyConcern, parseKosherMark,
+  assessReligious, categoryConcerns, findConcerns, meatDairyConcern, mergeConcerns, parseKosherMarks,
   type Certification, type ReligiousAssessment,
 } from "./religious";
 
@@ -35,9 +35,11 @@ const tagToPhrase = (tag: string) => tag.replace(/^[a-z]{2}:/, "").replace(/-/g,
 
 /** Agencies recognised in Open Food Facts label tags. Extend as the knowledge base grows. */
 const TAG_AGENCIES: Array<{ pattern: RegExp; scheme: Scheme; id: string; name: string }> = [
-  { pattern: /(^|:)ou-kosher|orthodox-union/, scheme: "kosher", id: "ou", name: "OU" },
+  { pattern: /(^|:)(ou-kosher|kosher-ou)\b|orthodox-union/, scheme: "kosher", id: "ou", name: "OU" },
+  { pattern: /(^|:)(ok-kosher|kosher-ok)\b|organized-kashrut/, scheme: "kosher", id: "ok", name: "OK" },
   { pattern: /star-k/, scheme: "kosher", id: "star-k", name: "Star-K" },
   { pattern: /kof-k/, scheme: "kosher", id: "kof-k", name: "Kof-K" },
+  { pattern: /(^|:)(crc-kosher|kosher-crc)\b|chicago-rabbinical/, scheme: "kosher", id: "crc", name: "cRc" },
   { pattern: /islamic-food-and-nutrition-council|ifanca/, scheme: "halal", id: "ifanca", name: "IFANCA" },
 ];
 const GENERIC_TAG: Record<Scheme, RegExp> = {
@@ -85,9 +87,10 @@ export function collectCertifications(src: SourceProductLike, scheme: Scheme): C
     }
   }
   if (scheme === "kosher" && src.labelsText) {
-    const mark = parseKosherMark(src.labelsText);
-    const agency = mark ? MARK_AGENCIES[mark.agency] : undefined;
-    if (agency) found.set(agency.id, { agencyId: agency.id, agencyName: agency.name, confidence: "medium" });
+    for (const mark of parseKosherMarks(src.labelsText)) {
+      const agency = MARK_AGENCIES[mark.agency];
+      if (agency) found.set(agency.id, { agencyId: agency.id, agencyName: agency.name, confidence: "medium" });
+    }
   }
   return [...found.values()];
 }
@@ -111,11 +114,15 @@ export function enrichProduct(
 
   const religious = {} as Record<Scheme, ReligiousAssessment>;
   for (const scheme of ["kosher", "halal"] as const) {
-    const concerns = findConcerns(facts.ingredients, scheme, kb.religiousRules);
     const combo = scheme === "kosher" ? meatDairyConcern(facts.categoryHits) : null;
+    const concerns = mergeConcerns(
+      findConcerns(facts.ingredients, scheme, kb.religiousRules),
+      categoryConcerns(facts.categoryHits, scheme),
+      combo ? [combo] : [],
+    );
     religious[scheme] = assessReligious({
       scheme,
-      concerns: combo ? [...concerns, combo] : concerns,
+      concerns,
       certifications: collectCertifications(src, scheme),
       hasIngredients: facts.hasIngredients,
     });

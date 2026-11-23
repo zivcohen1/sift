@@ -152,11 +152,14 @@ function religiousFinding(
       marks: [],
     };
   }
-  // Each concern marks its own ingredient: forbidden ones as "Not kosher", doubtful ones as "Check".
-  const marks: IngredientMark[] = a.concerns.map((c) =>
-    c.severity === "forbidden"
-      ? { match: c.ingredient, level: "avoid", text: `Not ${scheme}` }
-      : { match: c.ingredient, level: doubtful, text: "Check" },
+  // Each concern marks its own ingredient rows: forbidden ones as "Not kosher", doubtful ones as "Check".
+  // "Meat with dairy" carries the actual words (beef, cheese), so both rows get marked.
+  const marks: IngredientMark[] = a.concerns.flatMap((c) =>
+    (c.terms?.length ? c.terms : [c.ingredient]).map((match): IngredientMark =>
+      c.severity === "forbidden"
+        ? { match, level: "avoid", text: `Not ${scheme}` }
+        : { match, level: doubtful, text: "Check" },
+    ),
   );
   const finding = (level: Level, title: string, detail: string): Finding => ({
     level,

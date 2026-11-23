@@ -588,7 +588,9 @@
       "lamb's lettuce",
       "lambs lettuce",
       "lamb's quarters",
-      "turkey berry"
+      "turkey berry",
+      "imitation bacon",
+      "vegan bacon"
     ],
     "impliedBy": []
   },
@@ -826,7 +828,8 @@
       "bacon flavour",
       "bacon-flavored",
       "ham flavor",
-      "smoked ham flavor"
+      "smoked ham flavor",
+      "imitation bacon"
     ],
     "impliedBy": []
   },

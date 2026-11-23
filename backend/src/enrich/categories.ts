@@ -3,14 +3,19 @@ import type { CategoryDef, Certainty } from "../types";
 
 const E_NUMBER_RE = /\be[\s-]?(\d{3,4}[a-z]?)\b/gi;
 
-/** Remove the category's exclusion phrases, e.g. "cocoa butter" for dairy. */
-export function stripExcluded(text: string, cat: CategoryDef): string {
+/** Remove whole-word phrases from normalized text, e.g. "turkey bacon" before looking for "bacon". */
+export function stripPhrases(text: string, phrases: readonly string[] = []): string {
   let s = text;
-  for (const phrase of cat.excludePhrases) {
+  for (const phrase of phrases) {
     const re = cachedTermRegex(normalizeText(phrase));
     s = s.replace(new RegExp(re.source, "gi"), " ");
   }
   return s;
+}
+
+/** Remove the category's exclusion phrases, e.g. "cocoa butter" for dairy. */
+export function stripExcluded(text: string, cat: CategoryDef): string {
+  return stripPhrases(text, cat.excludePhrases);
 }
 
 /**

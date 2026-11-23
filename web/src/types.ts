@@ -50,7 +50,8 @@ export interface ReligiousAssessment {
   scheme: Scheme;
   status: ReligiousStatus;
   certifications: Certification[];
-  concerns: Array<{ ingredient: string; severity: "forbidden" | "doubtful" }>;
+  /** `terms` are the label words to mark when they differ from `ingredient` ("meat with dairy" -> beef, cheese). */
+  concerns: Array<{ ingredient: string; severity: "forbidden" | "doubtful"; terms?: string[] }>;
   summary: string;
 }
 

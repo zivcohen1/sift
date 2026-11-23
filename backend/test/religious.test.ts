@@ -59,7 +59,9 @@ describe("findConcerns", () => {
 describe("meatDairyConcern", () => {
   it("breaks kosher law for meat with dairy", () => {
     const f = buildProductFacts("beef, cheese");
-    expect(meatDairyConcern(f.categoryHits)).toEqual({ ingredient: "meat with dairy", severity: "forbidden" });
+    expect(meatDairyConcern(f.categoryHits)).toEqual({
+      ingredient: "meat with dairy", severity: "forbidden", terms: ["beef", "cheese"],
+    });
   });
   it("allows dairy without meat", () => {
     expect(meatDairyConcern(buildProductFacts("tuna, cheese").categoryHits)).toBeNull();

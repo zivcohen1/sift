@@ -97,6 +97,11 @@ describe("ingredientTag", () => {
     expect(ingredientTag("salt", v)).toEqual({ text: "OK", level: "good" });
   });
 
+  it("marks the dairy row too when meat and dairy are mixed", () => {
+    const v = decideVerdict(SAMPLE, profile({ kosher: { on: true, accepted: ["ou"] } }));
+    expect(ingredientTag("whey", v)).toEqual({ text: "Not kosher", level: "avoid" });
+  });
+
   it("matches whole words only", () => {
     const v = decideVerdict(SAMPLE, profile({ kosher: { on: true, accepted: ["ou"] } }));
     expect(ingredientTag("baconnaise-free spread", v).text).toBe("OK");

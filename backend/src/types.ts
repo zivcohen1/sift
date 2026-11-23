@@ -33,6 +33,10 @@ export interface ReligiousRule {
   severity: "forbidden" | "doubtful";
   /** A forbidden rule that only possibly applies is reported as doubtful. */
   certainty: Certainty;
+  /** Phrases removed before matching, e.g. "turkey bacon" for the bacon rule. */
+  excludePhrases?: string[];
+  /** Only a problem without a recognised certification (e.g. wine is kosher only when certified). */
+  unlessCertified?: boolean;
 }
 
 export interface KnowledgeBase {

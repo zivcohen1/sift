@@ -6,7 +6,11 @@
       "halal"
     ],
     "severity": "forbidden",
-    "certainty": "definite"
+    "certainty": "definite",
+    "excludePhrases": [
+      "pork-free",
+      "pork free"
+    ]
   },
   {
     "ingredient": "bacon",
@@ -15,7 +19,17 @@
       "halal"
     ],
     "severity": "forbidden",
-    "certainty": "definite"
+    "certainty": "definite",
+    "excludePhrases": [
+      "turkey bacon",
+      "beef bacon",
+      "chicken bacon",
+      "vegan bacon",
+      "imitation bacon",
+      "bacon flavor",
+      "bacon flavour",
+      "bacon-flavored"
+    ]
   },
   {
     "ingredient": "lard",
@@ -33,7 +47,10 @@
       "halal"
     ],
     "severity": "forbidden",
-    "certainty": "definite"
+    "certainty": "definite",
+    "excludePhrases": [
+      "blood orange"
+    ]
   },
   {
     "ingredient": "shellfish",
@@ -157,6 +174,195 @@
   },
   {
     "ingredient": "enzymes",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "wine",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "grape juice",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "grape must",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "brandy",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "cognac",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "sherry",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "marsala",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "vermouth",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite",
+    "unlessCertified": true
+  },
+  {
+    "ingredient": "catfish",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "eel",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "shark",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "monkfish",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "sturgeon",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "swordfish",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "rabbit",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "frog legs",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "escargot",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "natural flavour",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "glycerine",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "glycerol",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "E471",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "E422",
     "schemes": [
       "kosher",
       "halal"

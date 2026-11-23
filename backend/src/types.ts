@@ -4,9 +4,13 @@ export type Certainty = "definite" | "possible";
 export type Scheme = "kosher" | "halal";
 
 /** One entry of the reference knowledge base (data/categories.json). */
+export type CategoryGroup = "allergen" | "medical" | "diet" | "religious";
+
 export interface CategoryDef {
   id: string;
   label: string;
+  /** Which part of the restrictions screen the category belongs to. */
+  group?: CategoryGroup;
   terms: string[];
   possibleTerms: string[];
   eNumbers: string[];

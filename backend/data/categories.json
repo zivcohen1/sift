@@ -2,6 +2,7 @@
   {
     "id": "dairy",
     "label": "Dairy",
+    "group": "allergen",
     "terms": [
       "milk",
       "whey",
@@ -11,25 +12,179 @@
       "cheese",
       "cream",
       "yogurt",
+      "yoghurt",
       "lactose",
       "ghee",
-      "buttermilk"
+      "buttermilk",
+      "curds",
+      "kefir",
+      "paneer",
+      "lactalbumin",
+      "lactoglobulin",
+      "lactoferrin",
+      "milkfat",
+      "butterfat",
+      "butter oil",
+      "sour cream",
+      "ice cream",
+      "half and half",
+      "milk powder",
+      "milk solids",
+      "skim milk",
+      "whey protein"
     ],
     "possibleTerms": [],
     "eNumbers": [],
     "excludePhrases": [
       "cocoa butter",
+      "cacao butter",
       "peanut butter",
-      "coconut milk",
+      "almond butter",
+      "cashew butter",
+      "nut butter",
+      "seed butter",
+      "sunflower butter",
+      "apple butter",
       "shea butter",
+      "mango butter",
+      "kokum butter",
+      "butter beans",
+      "butter bean",
+      "butter lettuce",
+      "butterhead",
+      "cream of tartar",
+      "coconut milk",
+      "almond milk",
+      "cashew milk",
       "soy milk",
-      "oat milk"
+      "oat milk",
+      "rice milk",
+      "hemp milk",
+      "milk thistle",
+      "dairy-free",
+      "dairy free",
+      "non-dairy",
+      "nondairy"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "egg",
+    "label": "Egg",
+    "group": "allergen",
+    "terms": [
+      "egg",
+      "egg white",
+      "egg yolk",
+      "albumin",
+      "albumen",
+      "ovalbumin",
+      "ovomucoid",
+      "lysozyme",
+      "mayonnaise",
+      "meringue",
+      "eggnog"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "egg-free",
+      "egg free",
+      "eggless",
+      "egg replacer",
+      "egg substitute"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "peanut",
+    "label": "Peanut",
+    "group": "allergen",
+    "terms": [
+      "peanut",
+      "groundnut",
+      "arachis",
+      "arachis oil",
+      "peanut flour",
+      "peanut oil"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "peanut-free",
+      "peanut free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "tree_nut",
+    "label": "Tree nuts",
+    "group": "allergen",
+    "terms": [
+      "almond",
+      "cashew",
+      "walnut",
+      "pecan",
+      "pistachio",
+      "hazelnut",
+      "filbert",
+      "macadamia",
+      "chestnut",
+      "brazil nut",
+      "tree nut",
+      "nuts",
+      "gianduja",
+      "marzipan",
+      "praline"
+    ],
+    "possibleTerms": [
+      "pine nut",
+      "nougat"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "water chestnut",
+      "nut-free",
+      "nut free",
+      "tree nut free",
+      "tree-nut-free",
+      "nutmeg"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "soy",
+    "label": "Soy",
+    "group": "allergen",
+    "terms": [
+      "soy",
+      "soya",
+      "soybean",
+      "edamame",
+      "tofu",
+      "tempeh",
+      "miso",
+      "shoyu",
+      "tamari",
+      "soy lecithin",
+      "soy sauce",
+      "soy protein"
+    ],
+    "possibleTerms": [
+      "textured vegetable protein",
+      "hydrolyzed vegetable protein"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "soy-free",
+      "soy free"
     ],
     "impliedBy": []
   },
   {
     "id": "wheat",
     "label": "Wheat",
+    "group": "allergen",
     "terms": [
       "wheat",
       "semolina",
@@ -37,20 +192,64 @@
       "spelt",
       "farina",
       "couscous",
-      "graham"
+      "graham",
+      "bulgur",
+      "bulghur",
+      "kamut",
+      "einkorn",
+      "emmer",
+      "farro",
+      "seitan",
+      "triticum",
+      "matzo",
+      "matzah",
+      "panko"
     ],
-    "possibleTerms": [],
+    "possibleTerms": [
+      "flour",
+      "enriched flour",
+      "bread crumbs",
+      "breadcrumbs",
+      "bran"
+    ],
     "eNumbers": [],
     "excludePhrases": [
+      "buckwheat flour",
       "buckwheat",
       "wheat-free",
-      "wheat free"
+      "wheat free",
+      "rice flour",
+      "corn flour",
+      "almond flour",
+      "coconut flour",
+      "chickpea flour",
+      "tapioca flour",
+      "potato flour",
+      "oat flour",
+      "soy flour",
+      "cassava flour",
+      "sorghum flour",
+      "arrowroot flour",
+      "millet flour",
+      "bean flour",
+      "lentil flour",
+      "pea flour",
+      "banana flour",
+      "quinoa flour",
+      "teff flour",
+      "amaranth flour",
+      "gluten-free flour",
+      "gluten free flour",
+      "rice bran",
+      "oat bran",
+      "corn bran"
     ],
     "impliedBy": []
   },
   {
     "id": "gluten",
     "label": "Gluten",
+    "group": "allergen",
     "terms": [
       "gluten",
       "barley",
@@ -60,10 +259,17 @@
     ],
     "possibleTerms": [
       "modified food starch",
-      "dextrin"
+      "dextrin",
+      "oat",
+      "brewers yeast",
+      "brewer's yeast"
     ],
     "eNumbers": [],
     "excludePhrases": [
+      "gluten-free oats",
+      "gluten free oats",
+      "gluten-free oat",
+      "gluten free oat",
       "gluten-free",
       "gluten free"
     ],
@@ -72,30 +278,165 @@
     ]
   },
   {
-    "id": "tree_nut",
-    "label": "Tree nuts",
+    "id": "fish",
+    "label": "Fish",
+    "group": "allergen",
     "terms": [
-      "almond",
-      "cashew",
-      "walnut",
-      "pecan",
-      "pistachio",
-      "hazelnut",
-      "macadamia",
-      "chestnut",
-      "tree nut",
-      "nuts"
+      "fish",
+      "anchovy",
+      "anchovies",
+      "salmon",
+      "tuna",
+      "cod",
+      "tilapia",
+      "haddock",
+      "pollock",
+      "sardine",
+      "trout",
+      "mackerel",
+      "herring",
+      "halibut",
+      "catfish",
+      "flounder",
+      "perch",
+      "snapper",
+      "swordfish",
+      "mahi mahi",
+      "surimi",
+      "isinglass",
+      "fish sauce",
+      "fish oil",
+      "fish gelatin"
+    ],
+    "possibleTerms": [
+      "worcestershire sauce",
+      "caesar dressing"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "swedish fish",
+      "fish-free",
+      "fish free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "shellfish",
+    "label": "Shellfish",
+    "group": "allergen",
+    "terms": [
+      "shellfish",
+      "shrimp",
+      "prawn",
+      "crab",
+      "lobster",
+      "crayfish",
+      "crawfish",
+      "langoustine",
+      "krill",
+      "clam",
+      "mussel",
+      "oyster",
+      "scallop",
+      "abalone",
+      "squid",
+      "calamari",
+      "octopus",
+      "cuttlefish",
+      "crustacean",
+      "mollusc",
+      "mollusk",
+      "oyster sauce"
+    ],
+    "possibleTerms": [
+      "glucosamine",
+      "chitosan"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "oyster mushroom",
+      "crab apple",
+      "crabapple",
+      "shellfish-free",
+      "shellfish free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "sesame",
+    "label": "Sesame",
+    "group": "allergen",
+    "terms": [
+      "sesame",
+      "tahini",
+      "benne",
+      "gingelly",
+      "sesame oil",
+      "sesame seed"
+    ],
+    "possibleTerms": [
+      "halva",
+      "halvah",
+      "hummus"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "sesame-free",
+      "sesame free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "mustard",
+    "label": "Mustard",
+    "group": "allergen",
+    "terms": [
+      "mustard",
+      "mustard seed",
+      "mustard flour",
+      "dijon"
     ],
     "possibleTerms": [],
     "eNumbers": [],
     "excludePhrases": [
-      "water chestnut"
+      "mustard-free",
+      "mustard free"
     ],
+    "impliedBy": []
+  },
+  {
+    "id": "sulfites",
+    "label": "Sulfites",
+    "group": "allergen",
+    "terms": [
+      "sulfite",
+      "sulphite",
+      "bisulfite",
+      "bisulphite",
+      "metabisulfite",
+      "metabisulphite",
+      "sulfur dioxide",
+      "sulphur dioxide"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E220",
+      "E221",
+      "E222",
+      "E223",
+      "E224",
+      "E225",
+      "E226",
+      "E227",
+      "E228"
+    ],
+    "excludePhrases": [],
     "impliedBy": []
   },
   {
     "id": "phosphate_additives",
     "label": "Phosphate additives",
+    "group": "medical",
     "terms": [
       "phosphoric acid",
       "sodium phosphate",
@@ -117,8 +458,89 @@
     "impliedBy": []
   },
   {
+    "id": "phenylalanine_source",
+    "label": "Phenylalanine (PKU)",
+    "group": "medical",
+    "terms": [
+      "aspartame",
+      "phenylalanine",
+      "aspartame-acesulfame"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E951",
+      "E962"
+    ],
+    "excludePhrases": [],
+    "impliedBy": []
+  },
+  {
+    "id": "potassium_additives",
+    "label": "Potassium additives",
+    "group": "medical",
+    "terms": [
+      "potassium chloride",
+      "potassium lactate",
+      "potassium citrate",
+      "potassium bicarbonate",
+      "potassium carbonate",
+      "potassium sorbate",
+      "potassium benzoate",
+      "potassium acetate",
+      "potassium nitrate",
+      "potassium nitrite",
+      "potassium sulfate",
+      "potassium sulphate"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E202",
+      "E212",
+      "E261",
+      "E326",
+      "E332",
+      "E336",
+      "E501",
+      "E508",
+      "E515"
+    ],
+    "excludePhrases": [],
+    "impliedBy": []
+  },
+  {
+    "id": "sodium_additives",
+    "label": "Sodium additives",
+    "group": "medical",
+    "terms": [
+      "monosodium glutamate",
+      "msg",
+      "sodium nitrite",
+      "sodium nitrate",
+      "sodium benzoate",
+      "sodium bicarbonate",
+      "baking soda",
+      "sodium propionate",
+      "disodium inosinate",
+      "disodium guanylate"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E211",
+      "E250",
+      "E251",
+      "E281",
+      "E500",
+      "E621",
+      "E627",
+      "E631"
+    ],
+    "excludePhrases": [],
+    "impliedBy": []
+  },
+  {
     "id": "meat",
     "label": "Meat and poultry",
+    "group": "diet",
     "terms": [
       "beef",
       "pork",
@@ -126,10 +548,379 @@
       "turkey",
       "lamb",
       "bacon",
-      "ham"
+      "ham",
+      "veal",
+      "duck",
+      "goose",
+      "venison",
+      "bison",
+      "mutton",
+      "goat",
+      "rabbit",
+      "sausage",
+      "hot dog",
+      "prosciutto",
+      "salami",
+      "pepperoni",
+      "pancetta",
+      "jerky",
+      "poultry",
+      "tallow",
+      "suet",
+      "lard",
+      "bone broth",
+      "meat"
     ],
     "possibleTerms": [],
     "eNumbers": [],
+    "excludePhrases": [
+      "meat-free",
+      "meat free",
+      "meatless",
+      "meat substitute",
+      "meat alternative",
+      "imitation meat",
+      "coconut meat",
+      "nut meat",
+      "nutmeat",
+      "crab meat",
+      "lobster meat",
+      "lamb's lettuce",
+      "lambs lettuce",
+      "lamb's quarters",
+      "turkey berry"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "seafood",
+    "label": "Fish and seafood",
+    "group": "diet",
+    "terms": [
+      "fish",
+      "anchovy",
+      "anchovies",
+      "salmon",
+      "tuna",
+      "cod",
+      "tilapia",
+      "haddock",
+      "pollock",
+      "sardine",
+      "trout",
+      "mackerel",
+      "herring",
+      "halibut",
+      "catfish",
+      "flounder",
+      "perch",
+      "snapper",
+      "swordfish",
+      "mahi mahi",
+      "surimi",
+      "isinglass",
+      "fish sauce",
+      "fish oil",
+      "fish gelatin",
+      "shellfish",
+      "shrimp",
+      "prawn",
+      "crab",
+      "lobster",
+      "crayfish",
+      "crawfish",
+      "langoustine",
+      "krill",
+      "clam",
+      "mussel",
+      "oyster",
+      "scallop",
+      "abalone",
+      "squid",
+      "calamari",
+      "octopus",
+      "cuttlefish",
+      "crustacean",
+      "mollusc",
+      "mollusk",
+      "oyster sauce"
+    ],
+    "possibleTerms": [
+      "worcestershire sauce",
+      "caesar dressing",
+      "glucosamine",
+      "chitosan"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "swedish fish",
+      "fish-free",
+      "fish free",
+      "oyster mushroom",
+      "crab apple",
+      "crabapple",
+      "shellfish-free",
+      "shellfish free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "honey",
+    "label": "Honey and bee products",
+    "group": "diet",
+    "terms": [
+      "honey",
+      "royal jelly",
+      "propolis",
+      "beeswax",
+      "bee pollen"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E901"
+    ],
+    "excludePhrases": [
+      "honey-free",
+      "honey free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "artificial_sweeteners",
+    "label": "Artificial sweeteners",
+    "group": "diet",
+    "terms": [
+      "aspartame",
+      "sucralose",
+      "saccharin",
+      "acesulfame",
+      "acesulfame potassium",
+      "acesulfame k",
+      "ace-k",
+      "neotame",
+      "advantame",
+      "cyclamate",
+      "sodium cyclamate"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E950",
+      "E951",
+      "E952",
+      "E954",
+      "E955",
+      "E961",
+      "E962",
+      "E969"
+    ],
+    "excludePhrases": [],
+    "impliedBy": []
+  },
+  {
+    "id": "added_sugars",
+    "label": "Added sugars",
+    "group": "diet",
+    "terms": [
+      "sugar",
+      "cane sugar",
+      "brown sugar",
+      "corn syrup",
+      "high fructose corn syrup",
+      "glucose syrup",
+      "glucose-fructose syrup",
+      "fructose",
+      "dextrose",
+      "maltose",
+      "sucrose",
+      "molasses",
+      "agave",
+      "maple syrup",
+      "invert sugar",
+      "cane juice",
+      "evaporated cane juice",
+      "rice syrup",
+      "barley malt",
+      "turbinado",
+      "corn sweetener",
+      "syrup",
+      "honey"
+    ],
+    "possibleTerms": [
+      "fruit juice concentrate"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "sugar-free",
+      "sugar free",
+      "no sugar added",
+      "no added sugar",
+      "sugar alcohol",
+      "sugar substitute"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "caffeine",
+    "label": "Caffeine",
+    "group": "diet",
+    "terms": [
+      "caffeine",
+      "guarana",
+      "yerba mate",
+      "coffee",
+      "coffee extract",
+      "green tea extract",
+      "kola nut",
+      "cola nut"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "decaffeinated coffee",
+      "decaf coffee",
+      "decaffeinated",
+      "decaf",
+      "caffeine-free",
+      "caffeine free"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "pork",
+    "label": "Pork and pork products",
+    "group": "religious",
+    "terms": [
+      "pork",
+      "bacon",
+      "ham",
+      "lard",
+      "prosciutto",
+      "pancetta",
+      "pork fat",
+      "pork rinds",
+      "pork gelatin",
+      "gammon",
+      "jamon",
+      "speck",
+      "guanciale",
+      "hog"
+    ],
+    "possibleTerms": [
+      "pepperoni",
+      "salami",
+      "sausage",
+      "chorizo",
+      "bologna",
+      "hot dog",
+      "frankfurter",
+      "mortadella"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "turkey bacon",
+      "turkey ham",
+      "beef bacon",
+      "chicken bacon",
+      "vegan bacon",
+      "bacon flavor",
+      "bacon flavour",
+      "bacon-flavored",
+      "ham flavor",
+      "smoked ham flavor"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "alcohol",
+    "label": "Alcohol",
+    "group": "religious",
+    "terms": [
+      "alcohol",
+      "ethanol",
+      "ethyl alcohol",
+      "wine",
+      "beer",
+      "rum",
+      "whiskey",
+      "whisky",
+      "vodka",
+      "brandy",
+      "liqueur",
+      "bourbon",
+      "sake",
+      "sherry",
+      "mirin",
+      "cooking wine",
+      "ale",
+      "lager"
+    ],
+    "possibleTerms": [
+      "vanilla extract"
+    ],
+    "eNumbers": [],
+    "excludePhrases": [
+      "wine vinegar",
+      "red wine vinegar",
+      "white wine vinegar",
+      "sugar alcohol",
+      "alcohol-free",
+      "alcohol free",
+      "non-alcoholic",
+      "nonalcoholic",
+      "root beer",
+      "ginger beer",
+      "cetyl alcohol",
+      "stearyl alcohol",
+      "cetearyl alcohol",
+      "fatty alcohol",
+      "benzyl alcohol",
+      "polyvinyl alcohol"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "blood",
+    "label": "Blood products",
+    "group": "religious",
+    "terms": [
+      "blood",
+      "blood plasma",
+      "black pudding",
+      "blood sausage",
+      "hemoglobin",
+      "haemoglobin",
+      "bovine plasma",
+      "porcine plasma"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [],
+    "excludePhrases": [
+      "blood orange"
+    ],
+    "impliedBy": []
+  },
+  {
+    "id": "insect_derived",
+    "label": "Insect-derived ingredients",
+    "group": "religious",
+    "terms": [
+      "carmine",
+      "cochineal",
+      "carminic acid",
+      "natural red 4",
+      "crimson lake",
+      "shellac",
+      "confectioner's glaze",
+      "confectioners glaze",
+      "resinous glaze",
+      "cricket flour",
+      "cricket powder"
+    ],
+    "possibleTerms": [],
+    "eNumbers": [
+      "E120",
+      "E904"
+    ],
     "excludePhrases": [],
     "impliedBy": []
   }

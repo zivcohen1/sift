@@ -7,7 +7,7 @@ describe("ingredient data quality", () => {
     const src = { ingredientsText: "sugar, palm oil", allergenTags: ["en:milk", "en:nuts", "en:soybeans"], nutrition: null };
     const quality = ingredientDataQuality(src);
     expect(quality.hasConflict).toBe(true);
-    expect(quality.unlistedAllergens).toEqual(["milk", "nuts"]);
+    expect(quality.unlistedAllergens).toEqual(["milk", "nuts", "soybeans"]);
     const enriched = enrichProduct(src, "open_food_facts");
     expect(enriched.warnings).toContain("ingredient_data_conflict");
     expect(enriched.facts.ingredients).toEqual(["sugar", "palm oil"]);

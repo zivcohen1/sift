@@ -12,7 +12,7 @@ describe("buildProductFacts", () => {
 
   it("caps hits from a May contain statement at possible", () => {
     const f = buildProductFacts("sugar. May contain: almonds.");
-    expect(f.categoryHits).toEqual([
+    expect(f.categoryHits.filter((h) => h.categoryId === "tree_nut")).toEqual([
       expect.objectContaining({ categoryId: "tree_nut", certainty: "possible", fromMayContain: true }),
     ]);
     expect(f.hasIngredients).toBe(true);

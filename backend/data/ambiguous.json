@@ -1,5 +1,137 @@
 [
-  { "term": "natural flavor", "mightBelongTo": ["dairy", "gluten", "tree_nut", "meat"], "qualifiers": [] },
-  { "term": "gelatin", "mightBelongTo": ["meat"], "qualifiers": ["fish gelatin", "beef gelatin", "bovine gelatin"] },
-  { "term": "mono- and diglycerides", "mightBelongTo": ["meat", "dairy"], "qualifiers": ["vegetable mono- and diglycerides"] }
+  {
+    "term": "natural flavor",
+    "mightBelongTo": [
+      "dairy",
+      "gluten",
+      "tree_nut",
+      "meat"
+    ],
+    "qualifiers": []
+  },
+  {
+    "term": "gelatin",
+    "mightBelongTo": [
+      "meat",
+      "pork",
+      "fish"
+    ],
+    "qualifiers": [
+      "fish gelatin",
+      "beef gelatin",
+      "bovine gelatin",
+      "pork gelatin",
+      "porcine gelatin",
+      "vegetable gelatin",
+      "plant-based gelatin"
+    ]
+  },
+  {
+    "term": "mono- and diglycerides",
+    "mightBelongTo": [
+      "meat",
+      "dairy",
+      "pork"
+    ],
+    "qualifiers": [
+      "vegetable mono- and diglycerides",
+      "plant-based mono- and diglycerides"
+    ]
+  },
+  {
+    "term": "lecithin",
+    "mightBelongTo": [
+      "soy",
+      "egg"
+    ],
+    "qualifiers": [
+      "sunflower lecithin",
+      "canola lecithin",
+      "soy lecithin",
+      "egg lecithin"
+    ]
+  },
+  {
+    "term": "glycerin",
+    "mightBelongTo": [
+      "meat",
+      "pork"
+    ],
+    "qualifiers": [
+      "vegetable glycerin",
+      "vegetable glycerine",
+      "plant-based glycerin"
+    ]
+  },
+  {
+    "term": "enzymes",
+    "mightBelongTo": [
+      "dairy",
+      "meat",
+      "pork"
+    ],
+    "qualifiers": [
+      "microbial enzymes",
+      "plant enzymes",
+      "vegetable enzymes"
+    ]
+  },
+  {
+    "term": "rennet",
+    "mightBelongTo": [
+      "meat",
+      "pork"
+    ],
+    "qualifiers": [
+      "microbial rennet",
+      "vegetable rennet",
+      "vegetarian rennet"
+    ]
+  },
+  {
+    "term": "stearic acid",
+    "mightBelongTo": [
+      "meat",
+      "pork"
+    ],
+    "qualifiers": [
+      "vegetable stearic acid",
+      "plant-based stearic acid"
+    ]
+  },
+  {
+    "term": "natural colors",
+    "mightBelongTo": [
+      "insect_derived"
+    ],
+    "qualifiers": []
+  },
+  {
+    "term": "artificial flavors",
+    "mightBelongTo": [
+      "dairy",
+      "soy",
+      "egg"
+    ],
+    "qualifiers": []
+  },
+  {
+    "term": "spices",
+    "mightBelongTo": [
+      "mustard",
+      "sesame"
+    ],
+    "qualifiers": []
+  },
+  {
+    "term": "vitamin d3",
+    "mightBelongTo": [
+      "meat",
+      "pork"
+    ],
+    "qualifiers": [
+      "vegan vitamin d3",
+      "lichen vitamin d3"
+    ]
+  }
 ]

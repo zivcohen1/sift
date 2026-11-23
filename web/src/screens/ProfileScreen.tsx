@@ -1,5 +1,5 @@
 import { toggle, type Profile } from "../profile";
-import { CATEGORIES, HALAL_AGENCIES, KOSHER_AGENCIES, type Category } from "../reference";
+import { CATEGORIES, CATEGORY_GROUPS, HALAL_AGENCIES, KOSHER_AGENCIES, type Category } from "../reference";
 
 interface Props {
   profile: Profile;
@@ -81,16 +81,25 @@ export function ProfileScreen({ profile, onChange, onBack, onErase }: Props) {
       </p>
 
       <h2 className="caps">Avoid</h2>
-      <div className="chips">
-        {CATEGORIES.map((c) => (
-          <Chip
-            key={c.id}
-            label={c.label}
-            on={profile.avoid.includes(c.id)}
-            onClick={() => onChange({ ...profile, avoid: toggle(profile.avoid, c.id) })}
-          />
-        ))}
-      </div>
+      {CATEGORY_GROUPS.map((group) => {
+        const inGroup = CATEGORIES.filter((c) => c.group === group.id);
+        if (inGroup.length === 0) return null;
+        return (
+          <div key={group.id}>
+            <div className="muted small">{group.label}</div>
+            <div className="chips">
+              {inGroup.map((c) => (
+                <Chip
+                  key={c.id}
+                  label={c.label}
+                  on={profile.avoid.includes(c.id)}
+                  onClick={() => onChange({ ...profile, avoid: toggle(profile.avoid, c.id) })}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
 
       <h2 className="caps">Diets and rules</h2>
       <div className="card settings">

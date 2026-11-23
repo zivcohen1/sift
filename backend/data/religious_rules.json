@@ -1,11 +1,167 @@
 [
-  { "ingredient": "pork", "schemes": ["kosher", "halal"], "severity": "forbidden", "certainty": "definite" },
-  { "ingredient": "bacon", "schemes": ["kosher", "halal"], "severity": "forbidden", "certainty": "definite" },
-  { "ingredient": "shellfish", "schemes": ["kosher"], "severity": "forbidden", "certainty": "definite" },
-  { "ingredient": "carmine", "schemes": ["kosher"], "severity": "forbidden", "certainty": "definite" },
-  { "ingredient": "alcohol", "schemes": ["halal"], "severity": "forbidden", "certainty": "definite" },
-  { "ingredient": "pepperoni", "schemes": ["kosher", "halal"], "severity": "forbidden", "certainty": "possible" },
-  { "ingredient": "gelatin", "schemes": ["kosher", "halal"], "severity": "doubtful", "certainty": "definite" },
-  { "ingredient": "vanilla extract", "schemes": ["halal"], "severity": "doubtful", "certainty": "definite" },
-  { "ingredient": "natural flavor", "schemes": ["kosher", "halal"], "severity": "doubtful", "certainty": "definite" }
+  {
+    "ingredient": "pork",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "bacon",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "lard",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "blood",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "shellfish",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "carmine",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "cochineal",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "alcohol",
+    "schemes": [
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "pepperoni",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "possible"
+  },
+  {
+    "ingredient": "salami",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "forbidden",
+    "certainty": "possible"
+  },
+  {
+    "ingredient": "gelatin",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "vanilla extract",
+    "schemes": [
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "natural flavor",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "rennet",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "l-cysteine",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "shellac",
+    "schemes": [
+      "kosher"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "mono- and diglycerides",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "glycerin",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  },
+  {
+    "ingredient": "enzymes",
+    "schemes": [
+      "kosher",
+      "halal"
+    ],
+    "severity": "doubtful",
+    "certainty": "definite"
+  }
 ]

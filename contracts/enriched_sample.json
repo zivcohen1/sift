@@ -21,6 +21,13 @@
         "fromMayContain": false
       },
       {
+        "categoryId": "added_sugars",
+        "term": "sugar",
+        "certainty": "definite",
+        "ingredient": "sugar",
+        "fromMayContain": false
+      },
+      {
         "categoryId": "dairy",
         "term": "whey",
         "certainty": "definite",
@@ -29,6 +36,13 @@
       },
       {
         "categoryId": "meat",
+        "term": "bacon",
+        "certainty": "definite",
+        "ingredient": "bacon bits",
+        "fromMayContain": false
+      },
+      {
+        "categoryId": "pork",
         "term": "bacon",
         "certainty": "definite",
         "ingredient": "bacon bits",
@@ -76,7 +90,7 @@
         ]
       }
     ],
-    "kbVersion": "0.1.0"
+    "kbVersion": "0.2.0"
   },
   "nutrientsPer100g": {
     "sodium_mg": 600,

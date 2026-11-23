@@ -3,7 +3,7 @@ import ambiguous from "../data/ambiguous.json";
 import religiousRules from "../data/religious_rules.json";
 import type { CategoryDef, AmbiguousDef, KnowledgeBase, ReligiousRule } from "./types";
 
-export const KB_VERSION = "0.1.0";
+export const KB_VERSION = "0.2.0";
 
 export function loadKnowledgeBase(): KnowledgeBase {
   return {

@@ -7,7 +7,9 @@ The API gets product data from Open Food Facts and USDA FoodData Central. The we
 checks it against your restrictions and stores your profile and history in your browser.
 
 Verdicts include **Not a match**, **Check before eating**, **Not sure**, and **No listed
-conflicts**. The knowledge base is currently a small sample, so coverage is limited.
+conflicts**. The knowledge base (version 0.2.0) covers 26 categories: 12 allergen, 4 medical, 6 diet and
+4 religious. It is a starting dictionary that still needs review by a domain expert, so coverage
+is not complete.
 
 ## Repository layout
 
@@ -150,7 +152,8 @@ This builds and deploys the website.
 ## Open work
 
 - Replace the placeholder KV namespace ID and contact email in `backend/wrangler.toml`.
-- Replace and validate the sample knowledge base in `backend/data/`; update `KB_VERSION`
-  in `backend/src/refdata.ts` when publishing a new version.
+- Have a domain expert (for example a dietitian or a rabbi or imam for the religious rules)
+  review `backend/data/`. Every change must bump `KB_VERSION` in `backend/src/refdata.ts`
+  and regenerate the contract fixture.
 - Connect a label-photo reading flow and the ambiguous-ingredient AI check to the web UI.
 - Add profile export/import if profiles should transfer between browsers or devices.

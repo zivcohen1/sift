@@ -15,7 +15,7 @@ your restrictions. It follows the screens in `Sift UX UI Concept.pdf`.
 The verdict screen shows declared allergens separately from the ingredient list. If a
 known allergen is declared but not accounted for in that list, Sift flags the data as
 possibly incomplete and returns at least "Not sure". This detects inconsistent evidence;
-it cannot verify that a recipe is complete, especially with the current sample knowledge base.
+it cannot verify that a recipe is complete.
 
 The product data comes from the team's API (`backend/`, deployed at
 `https://sift-api.siftmu.workers.dev`). The verdict is decided **in the browser**, and the

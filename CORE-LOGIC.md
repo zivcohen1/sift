@@ -9,7 +9,7 @@ decision. Pure functions, no network, no user data.
 ```bash
 cd backend
 npm install
-npm test           # 103 unit tests
+npm test           # unit tests
 npm run typecheck
 ```
 
@@ -92,7 +92,15 @@ shape changes on purpose: `UPDATE_CONTRACT=1 npx vitest run` in `backend/`, then
 
 ## Knowledge-base data
 
-`data/*.json` here is a small sample. Do not overwrite the real knowledge base with it.
+`data/*.json` holds the knowledge base (version 0.2.0): 26 categories in four groups
+(12 allergen, 4 medical, 6 diet, 4 religious), 12 ambiguous terms and 19 kosher/halal rules.
+Wrong entries can hide an allergen, so change them through a pull request, keep
+`test/knowledge.test.ts` green, bump `KB_VERSION` in `src/refdata.ts`, and regenerate the
+contract fixture (`UPDATE_CONTRACT=1 npx vitest run test/contract.test.ts`).
+
+When you add terms, remember the matcher is whole-word and plural-tolerant, and that
+exclusion phrases are removed in list order, so put a longer phrase ("buckwheat flour")
+before the shorter one it contains ("buckwheat").
 
 
 ## Worker routes

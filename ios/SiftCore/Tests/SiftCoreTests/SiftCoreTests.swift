@@ -13,7 +13,7 @@ final class SiftCoreTests: XCTestCase {
 
     func testBackendContract() throws {
         let product = try sample()
-        XCTAssertEqual(product.facts.kbVersion, "0.1.0")
+        XCTAssertEqual(product.facts.kbVersion, "0.2.0")
         XCTAssertTrue(product.facts.hasIngredients)
         XCTAssertTrue(product.facts.categoryHits.contains { $0.impliedBy == "wheat" })
         XCTAssertTrue(product.facts.categoryHits.contains { $0.fromMayContain })
